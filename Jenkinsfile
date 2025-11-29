@@ -28,10 +28,11 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    sh "sonar-scanner"
+                    sh "${tool 'sonar-scanner'}/bin/sonar-scanner"
                 }
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 sh """
