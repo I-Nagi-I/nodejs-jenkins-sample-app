@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "jenkins-demo-app"
         DOCKER_TAG = "${BUILD_NUMBER}"
+        SONARQUBE_SERVER = "sonarqube-local"
     }
     
     stages {
@@ -24,8 +25,13 @@ pipeline {
                 sh 'npm test || true'
             }
         }
-
-        
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                    sh "sonar-scanner"
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 sh """
